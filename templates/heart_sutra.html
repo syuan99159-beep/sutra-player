@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ sutra.title }}｜經文播放器</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}"
+    >
+
+    <script id="sutra-alignment-data" type="application/json">
+    {{ alignment | tojson }}
+    </script>
+
+    <script
+        src="{{ url_for('static', filename='js/app.js') }}"
+        defer
+    ></script>
+</head>
+
+<body>
+    <main class="page-container">
+        <section class="main-card">
+
+            <div class="brand-label">FLASK SUTRA PLAYER</div>
+
+            <header class="header-content">
+                <h1>經文播放器</h1>
+                {% include "partials/font_controls.html" %}
+            </header>
+
+            <section class="heart-player-panel">
+
+                <div class="player-info">
+                    <a class="back-link" href="/">
+                        返回經書選單
+                    </a>
+
+                    <h2>{{ sutra.title }}</h2>
+
+                    <span class="player-status" id="player-status">
+                        音檔載入中
+                    </span>
+
+                    <span class="player-time" id="player-time">
+                        00:00 / 00:00
+                    </span>
+                    <div class="audio-progress-controls">
+                        <input
+                            type="range"
+                            id="audio-progress"
+                            min="0"
+                            max="1000"
+                            value="0"
+                            step="1"
+                            aria-label="音訊播放進度"
+                        >
+                    </div>
+                </div>
+
+                <!-- 真人誦經音檔 -->
+                <audio
+                    id="sutra-audio"
+                    preload="metadata"
+                    src="{{ url_for('serve_sound', filename=audio_filename) if audio_filename else '' }}"
+                ></audio>
+
+                <!-- 播放控制列 -->
+                <div class="playback-controls">
+
+                    <button
+                        type="button"
+                        class="player-button"
+                        id="previous-button"
+                        disabled
+                        title="完成經文時間同步後啟用"
+                    >
+                        上一句
+                    </button>
+
+                    <button
+                        type="button"
+                        class="player-button primary"
+                        id="play-button"
+                        disabled
+                    >
+                        播放
+                    </button>
+
+                    <button
+                        type="button"
+                        class="player-button"
+                        id="next-button"
+                        disabled
+                        title="完成經文時間同步後啟用"
+                    >
+                        下一句
+                    </button>
+
+                    <button
+                        type="button"
+                        class="player-button"
+                        id="restart-button"
+                        disabled
+                    >
+                        重播
+                    </button>
+
+                    <button
+                        type="button"
+                        class="player-button"
+                        id="loop-button"
+                        aria-pressed="false"
+                    >
+                        循環：關
+                    </button>
+                </div>
+
+                <!-- 速度與音量控制列 -->
+                <div class="playback-options">
+                    <div class="speed-group">
+                        <span class="speed-label">速度：快</span>
+
+                        <div class="speed-controls">
+                            <button type="button" class="speed-button" data-speed="2">2.0</button>
+                            <button type="button" class="speed-button" data-speed="1.5">1.5</button>
+                            <button type="button" class="speed-button active" data-speed="1">1.0</button>
+                            <button type="button" class="speed-button" data-speed="0.75">0.75</button>
+                            <button type="button" class="speed-button" data-speed="0.5">0.5</button>
+                        </div>
+
+                        <span class="speed-label">慢</span>
+                    </div>
+
+                    <div class="volume-controls">
+                        <label for="audio-volume">音量</label>
+                        <input
+                            type="range"
+                            id="audio-volume"
+                            min="0"
+                            max="1"
+                            value="0.8"
+                            step="0.05"
+                        >
+                    </div>
+                </div>
+
+                <!-- 經文閱讀區 -->
+                <article class="sutra-reading-panel" id="sutra-reading-panel">
+                    {% for paragraph in sutra.paragraphs %}
+                        <p data-paragraph-index="{{ loop.index0 }}">{{ paragraph }}</p>
+                    {% else %}
+                        <p>目前沒有可顯示的經文內容。</p>
+                    {% endfor %}
+                </article>
+            </section>
+        </section>
+    </main>
+
+    {% include "partials/ai_assistant_button.html" %}
+</body>
+</html>

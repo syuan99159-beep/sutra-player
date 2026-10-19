@@ -1,0 +1,8 @@
+Flask
+python-docx
+PyMuPDF
+watchdog
+numpy
+google-genai
+python-dotenv
+gunicorn

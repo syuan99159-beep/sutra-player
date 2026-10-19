@@ -1,0 +1,21 @@
+
+# API keys and secrets
+.env
+.env.*
+!.env.example
+
+# Python virtual environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local development files
+.vscode/
+.idea/
+.pytest_cache/
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db

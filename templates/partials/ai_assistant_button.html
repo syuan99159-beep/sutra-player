@@ -1,0 +1,73 @@
+<!-- AI 人生顧問：開關按鈕 -->
+<button
+    id="ai-assistant-button"
+    class="ai-assistant-button"
+    type="button"
+    aria-label="開啟 AI 人生顧問"
+    aria-controls="ai-assistant-panel"
+    aria-expanded="false"
+>
+    <span>AI 人生顧問</span>
+</button>
+
+<!-- AI 人生顧問聊天面板 -->
+<aside
+    id="ai-assistant-panel"
+    class="ai-assistant-panel"
+    aria-label="AI 人生顧問聊天面板"
+    aria-hidden="true"
+    inert
+>
+    <div id="ai-panel-resize-handle" class="ai-panel-resize-handle" role="separator" aria-orientation="vertical" aria-label="調整播放器與聊天區寬度" aria-valuemin="320" aria-valuemax="640" tabindex="0"></div>
+    <header class="ai-panel-header">
+        <div>
+            <h2>AI 人生顧問</h2>
+            <p>智慧解惑・陪伴你心</p>
+        </div>
+
+        <button
+            id="ai-panel-close"
+            class="ai-panel-close"
+            type="button"
+            aria-label="關閉 AI 人生顧問"
+        >×</button>
+    </header>
+
+    <nav class="ai-mode-list" aria-label="選擇顧問模式">
+        <button type="button" class="ai-mode-button active"
+                data-mode="sutra" aria-pressed="true">📖 經文智慧</button>
+        <button type="button" class="ai-mode-button"
+                data-mode="relationship" aria-pressed="false">💗 人際關係</button>
+        <button type="button" class="ai-mode-button"
+                data-mode="career" aria-pressed="false">💼 職涯發展</button>
+    </nav>
+
+    <div
+        id="ai-chat-messages"
+        class="ai-chat-messages"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+    >
+        <div class="ai-message ai-message-assistant">
+            <span class="ai-message-speaker">系統</span>
+            <p>你好，這裡是 AI 人生顧問。請選擇模式並輸入你的問題。</p>
+        </div>
+    </div>
+
+    <form id="ai-chat-form" class="ai-chat-form">
+        <label for="ai-chat-input">輸入你的問題</label>
+        <div class="ai-chat-input-row">
+            <textarea
+                id="ai-chat-input"
+                rows="2"
+                maxlength="2000"
+                placeholder="請輸入你想討論的問題……"
+                required
+            ></textarea>
+            <button type="submit" class="ai-send-button">送出</button>
+        </div>
+        
+<p class="ai-demo-note">AI 助理已就緒，可以開始提問。</p>
+    </form>
+</aside>

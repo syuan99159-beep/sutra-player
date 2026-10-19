@@ -1,0 +1,1323 @@
+/* =========================================================
+   經文播放器 styles.css
+   統一管理首頁、心經內頁、共用工具列與響應式版面
+   ========================================================= */
+
+/* 1. 全域變數與基礎設定 */
+:root {
+    --color-background: #f4ecdf;
+    --color-card: #fffaf3;
+    --color-brown: #654522;
+    --color-brown-dark: #4c321d;
+    --color-text: #302820;
+    --color-border: #e5dbce;
+    --color-white: #ffffff;
+    --color-muted: #81766a;
+    --color-highlight: #ffe78a;
+
+    --page-max-width: 1304px;
+    --card-radius: 32px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+    color: var(--color-text);
+    font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+    background:
+        radial-gradient(
+            ellipse at 12% 5%,
+            rgba(255, 255, 255, 0.95),
+            transparent 48%
+        ),
+        linear-gradient(180deg, #f5efe5 0%, #f0e4d1 100%);
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+button {
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+    touch-action: manipulation;
+}
+
+/* 2. 共用頁面容器與最外層面板 */
+.page-container {
+    width: min(var(--page-max-width), calc(100% - 48px));
+    margin: 28px auto 40px;
+}
+
+.main-card {
+    min-width: 0;
+    padding: 28px;
+    background: rgba(255, 250, 243, 0.96);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 24px 60px rgba(74, 54, 32, 0.12);
+}
+
+/* 3. 品牌標籤與首頁標題 */
+.brand-label {
+    margin-bottom: 12px;
+    color: #92683c;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.header-content h1 {
+    min-width: 0;
+    margin: 0;
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+/* 4. 共用字體大小控制 */
+.font-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.font-button {
+    min-width: 92px;
+    min-height: 48px;
+    padding: 12px 20px;
+    color: #44372d;
+    background: var(--color-white);
+    border: 1px solid #e4ddd5;
+    border-radius: 999px;
+    font-size: 17px;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.font-button.active {
+    color: var(--color-white);
+    background: var(--color-brown);
+    border-color: var(--color-brown);
+    font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .font-button:hover {
+        transform: translateY(-2px);
+    }
+
+    .ai-assistant-button:hover {
+        background: var(--color-brown-dark);
+    }
+
+    .sutra-card-link:hover {
+        border-color: #c8ad8e;
+        box-shadow: 0 4px 16px rgba(74, 54, 32, 0.08);
+    }
+
+    .back-link:hover {
+        background: var(--color-background);
+    }
+}
+
+.font-button:focus-visible,
+.ai-assistant-button:focus-visible,
+.player-button:focus-visible,
+.speed-button:focus-visible,
+.back-link:focus-visible,
+.sutra-card-link:focus-visible {
+    outline: 3px solid #b48b5b;
+    outline-offset: 4px;
+}
+
+/* 5. 首頁經文卡片 */
+.sutra-container {
+    min-width: 0;
+    margin-top: 24px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.48);
+    border: 1px solid #eee5da;
+    border-radius: 24px;
+}
+
+.sutra-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 88px;
+    padding: 20px;
+    color: var(--color-text);
+    background: var(--color-white);
+    border: 1px solid #e2ddd7;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+    transition:
+        font-size 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sutra-content.font-small {
+    font-size: 15px;
+}
+
+.sutra-content.font-medium {
+    font-size: 20px;
+}
+
+.sutra-content.font-large {
+    font-size: 28px;
+}
+
+.sutra-card-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 6. 共用 AI 人生顧問按鈕 */
+.ai-assistant-button {
+    position: fixed;
+    top: 36%;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    min-height: 184px;
+    padding: 20px 16px;
+    color: var(--color-white);
+    background: var(--color-brown);
+    border: none;
+    border-radius: 22px 0 0 22px;
+    box-shadow: 0 8px 28px rgba(66, 43, 23, 0.2);
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.ai-assistant-button span {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+/* 7. 心經內頁標題與返回連結 */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 8px 16px;
+    color: var(--color-brown);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sutra-page-header {
+    padding: 12px 0 24px;
+    text-align: center;
+}
+
+.sutra-page-header h1 {
+    margin: 12px 0;
+    color: var(--color-brown-dark);
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.5;
+}
+
+.sutra-description {
+    margin: 0;
+    color: #80694f;
+    font-size: 16px;
+}
+
+/* 舊版純經文區：保留，避免現有頁面失效 */
+.sutra-reading {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 12px;
+    color: var(--color-text);
+    font-size: 24px;
+    line-height: 2.2;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.sutra-reading p {
+    margin: 0 0 12px;
+}
+
+.sutra-reading.font-small {
+    font-size: 15px;
+}
+
+.sutra-reading.font-medium {
+    font-size: 20px;
+}
+
+.sutra-reading.font-large {
+    font-size: 28px;
+}
+
+/* 8. 心經播放器面板 */
+.heart-player-panel {
+    min-width: 0;
+    margin-top: 28px;
+    padding: 28px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid #eee5da;
+    border-radius: 24px;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.player-info .back-link {
+    flex-shrink: 0;
+}
+
+.player-info h2 {
+    min-width: 0;
+    margin: 0;
+    color: var(--color-text);
+    font-size: 26px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.player-status,
+.player-time {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 14px;
+    color: #7d7265;
+    background: #f0e9df;
+    border-radius: 999px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+/* 播放控制按鈕 */
+.playback-controls {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.player-button {
+    min-width: 0;
+    min-height: 72px;
+    padding: 12px 8px;
+    color: var(--color-text);
+    background: var(--color-white);
+    border: 1px solid #e3ddd5;
+    border-radius: 17px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.player-button.primary {
+    color: var(--color-white);
+    background: linear-gradient(180deg, #79572d, var(--color-brown));
+    border-color: var(--color-brown);
+}
+
+/* 播放速度按鈕 */
+.speed-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.speed-button {
+    min-width: 94px;
+    min-height: 56px;
+    padding: 10px 16px;
+    color: var(--color-text);
+    background: var(--color-white);
+    border: 1px solid #e3ddd5;
+    border-radius: 16px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.speed-button.active {
+    color: var(--color-white);
+    background: var(--color-brown);
+    border-color: var(--color-brown);
+    font-weight: 700;
+}
+
+/* 經文字幕面板 */
+.sutra-reading-panel {
+    min-width: 0;
+    min-height: 460px;
+    padding: 48px 24px;
+    color: var(--color-muted);
+    background: #fffaf3;
+    border: 1px solid #e5dbce;
+    border-radius: 32px;
+    text-align: center;
+    font-size: 24px;
+    line-height: 2.9;
+    letter-spacing: 3px;
+    overflow-wrap: anywhere;
+}
+
+.sutra-reading-panel.font-small {
+    font-size: 15px;
+}
+
+.sutra-reading-panel.font-medium {
+    font-size: 20px;
+}
+
+.sutra-reading-panel.font-large {
+    font-size: 28px;
+}
+
+.sutra-reading-panel p {
+    margin: 0 0 18px;
+}
+
+.character-highlight {
+    display: inline-block;
+    padding: 0 4px;
+    color: var(--color-brown-dark);
+    background: var(--color-highlight);
+    border-radius: 9px;
+    box-shadow: 0 6px 18px rgba(140, 104, 33, 0.12);
+}
+
+/* 9. 平板：601px 至 1024px */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .page-container {
+        width: calc(100% - 32px);
+        margin-top: 20px;
+    }
+
+    .main-card {
+        padding: 24px;
+        border-radius: 26px;
+    }
+
+    .header-content {
+        gap: 16px;
+    }
+
+    .header-content h1 {
+        font-size: clamp(34px, 4.5vw, 46px);
+        letter-spacing: 1px;
+    }
+
+    .font-controls {
+        gap: 8px;
+    }
+
+    .font-button {
+        min-width: 76px;
+        padding: 10px 12px;
+        font-size: 15px;
+    }
+
+    .sutra-container {
+        padding: 16px;
+    }
+
+    .ai-assistant-button {
+        width: 54px;
+        min-height: 156px;
+        padding: 16px 12px;
+    }
+
+    .ai-assistant-button span {
+        font-size: 17px;
+        letter-spacing: 2px;
+    }
+
+    .heart-player-panel {
+        padding: 20px;
+    }
+
+    .player-info h2 {
+        font-size: 22px;
+    }
+
+    .playback-controls {
+        gap: 8px;
+    }
+
+    .player-button {
+        font-size: 16px;
+    }
+
+    .sutra-reading-panel {
+        padding: 36px 18px;
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+}
+
+/* 10. 手機：600px 以下 */
+@media (max-width: 600px) {
+    .page-container {
+        width: calc(100% - 24px);
+        margin-top: 12px;
+        margin-bottom: 88px;
+    }
+
+    .main-card {
+        padding: 20px 16px;
+        border-radius: 22px;
+    }
+
+    .brand-label {
+        margin-bottom: 10px;
+        font-size: 11px;
+        letter-spacing: 3px;
+    }
+
+    .header-content {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .header-content h1 {
+        font-size: clamp(30px, 8vw, 40px);
+        letter-spacing: 1px;
+    }
+
+    .font-controls {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .font-button {
+        flex: 1;
+        min-width: 0;
+        min-height: 48px;
+        padding: 10px 4px;
+        font-size: 14px;
+    }
+
+    .sutra-container {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 18px;
+    }
+
+    .sutra-content {
+        min-height: 80px;
+        padding: 16px 10px;
+    }
+
+    .sutra-page-header {
+        padding: 4px 0 16px;
+    }
+
+    .sutra-reading {
+        padding: 12px 4px;
+        font-size: 21px;
+        line-height: 2;
+    }
+
+    .heart-player-panel {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 18px;
+    }
+
+    .player-info {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .player-info h2 {
+        width: 100%;
+        font-size: 22px;
+    }
+
+    .player-status,
+    .player-time {
+        min-height: 34px;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .playback-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .player-button {
+        min-height: 54px;
+        font-size: 15px;
+    }
+
+    .speed-controls {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .speed-button {
+        min-width: 0;
+        min-height: 46px;
+        padding: 8px 4px;
+        font-size: 15px;
+    }
+
+    .sutra-reading-panel {
+        min-height: 360px;
+        padding: 28px 12px;
+        border-radius: 20px;
+        font-size: 20px;
+        line-height: 2.5;
+        letter-spacing: 1px;
+    }
+
+    /* 手機版 AI 按鈕固定在底部 */
+    .ai-assistant-button {
+        top: auto;
+        right: 12px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        width: auto;
+        min-height: 48px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+    }
+
+    .ai-assistant-button span {
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+}
+
+/* 11. 超窄螢幕：360px 以下 */
+@media (max-width: 360px) {
+    .page-container {
+        width: calc(100% - 16px);
+    }
+
+    .main-card {
+        padding: 16px 12px;
+    }
+
+    .header-content h1 {
+        font-size: 29px;
+    }
+
+    .font-controls {
+        gap: 5px;
+    }
+
+    .font-button {
+        padding: 10px 2px;
+        font-size: 13px;
+    }
+
+    .sutra-container {
+        padding: 8px;
+    }
+
+    .player-info .back-link {
+        width: 100%;
+    }
+
+    .player-button {
+        padding: 10px 4px;
+        font-size: 14px;
+    }
+
+    .sutra-reading-panel {
+        padding: 24px 8px;
+        font-size: 18px;
+    }
+}
+
+/* 12. 橫向手機與平板 */
+@media (max-height: 500px) and (orientation: landscape) {
+    .page-container {
+        margin-top: 12px;
+    }
+
+    .main-card {
+        padding: 20px;
+    }
+
+    .ai-assistant-button {
+        top: auto;
+        bottom: 12px;
+        min-height: 120px;
+    }
+}
+
+/* 13. 減少動畫的無障礙設定 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+
+/* ===== 播放器資訊列 ===== */
+
+.player-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-bottom: 30px;
+    min-width: 0;
+}
+
+.player-info .back-link,
+.player-info .player-status,
+.player-info .player-time {
+    flex-shrink: 0;
+}
+
+.player-info h2 {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0;
+    white-space: nowrap;
+    overflow-wrap: normal;
+}
+
+.player-info .audio-progress-controls {
+    flex: 0 1 180px;
+    min-width: 100px;
+    margin-left: 4px;
+}
+
+.audio-progress-controls input {
+    display: block;
+    width: 100%;
+    margin: 0;
+    accent-color: var(--color-brown);
+    cursor: pointer;
+}
+
+/* 如果 HTML 還保留面板內的第二條進度條，將它隱藏 */
+.heart-player-panel > .audio-progress-controls {
+    display: none;
+}
+
+/* ===== 播放器主要控制按鈕 ===== */
+
+.playback-controls {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+/* ===== 速度與音量控制：同一列 ===== */
+
+.playback-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+    min-width: 0;
+}
+
+.speed-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.speed-label {
+    flex-shrink: 0;
+    font-size: 22px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.playback-options .speed-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin: 0;
+}
+
+.playback-options .speed-button {
+    flex: 0 0 90px;
+    min-width: 0;
+}
+
+.playback-options .volume-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    margin: 0 0 0 auto;
+}
+
+.playback-options .volume-controls label {
+    font-size: 22px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.playback-options .volume-controls input {
+    width: 150px;
+    accent-color: var(--color-brown);
+    cursor: pointer;
+}
+
+/* ===== 較窄的桌面與平板 ===== */
+@media (min-width: 601px) and (max-width: 1250px) {
+    .player-info {
+        flex-wrap: wrap;
+    }
+
+    .player-info .audio-progress-controls {
+        flex: 0 1 180px;
+    }
+
+    .playback-options {
+        flex-wrap: wrap;
+        row-gap: 16px;
+    }
+
+    .speed-label,
+    .playback-options .volume-controls label {
+        font-size: 16px;
+    }
+
+    .speed-group {
+        gap: 6px;
+    }
+
+    .playback-options .speed-controls {
+        gap: 6px;
+    }
+
+    .playback-options .speed-button {
+        flex: 0 0 58px;
+        padding: 10px 4px;
+        font-size: 15px;
+    }
+
+    .playback-options .volume-controls {
+        margin-left: 0;
+    }
+    
+    /* 平板：固定速度按鈕與兩側標籤的順序 */
+    .speed-group {
+        display: grid;
+        grid-template-columns: auto repeat(5, 58px) auto;
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+
+    .playback-options .speed-controls {
+        display: contents;
+    }
+
+    .playback-options .speed-button {
+        flex: none;
+    }
+
+}
+
+/* ===== 手機版 ===== */
+
+@media (max-width: 600px) {
+    .player-info {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .player-info .back-link {
+        width: 100%;
+    }
+
+    .player-info h2 {
+        flex: 1 1 100%;
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 22px;
+    }
+
+    .player-info .audio-progress-controls {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .playback-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .playback-options {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .speed-group {
+        flex-wrap: wrap;
+    }
+
+    .speed-label {
+        font-size: 18px;
+    }
+
+    .playback-options .speed-controls {
+        flex: 1 1 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .playback-options .speed-button {
+        min-width: 0;
+        min-height: 46px;
+        padding: 8px 4px;
+        font-size: 15px;
+    }
+
+    .playback-options .volume-controls {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .playback-options .volume-controls label {
+        font-size: 18px;
+    }
+
+    .playback-options .volume-controls input {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+    }
+}
+
+/* =========================
+   經文閱讀區：獨立捲動與響應式高度
+   ========================= */
+
+.sutra-reading-panel {
+    box-sizing: border-box;
+    width: 100%;
+
+    /* 桌面版高度上限 */
+    height: clamp(280px, 55vh, 460px);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* 保留原本的視覺風格 */
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #c9b49a #f8f0e6;
+}
+
+/* Chrome、Edge、Safari 的捲軸樣式 */
+.sutra-reading-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sutra-reading-panel::-webkit-scrollbar-track {
+    background: #f8f0e6;
+    border-radius: 8px;
+}
+
+.sutra-reading-panel::-webkit-scrollbar-thumb {
+    background: #c9b49a;
+    border-radius: 8px;
+}
+
+.sutra-reading-panel::-webkit-scrollbar-thumb:hover {
+    background: #ad9274;
+}
+
+/* 平板 */
+@media (min-width: 600px) and (max-width: 1024px) {
+    .sutra-reading-panel {
+        height: clamp(300px, 52vh, 520px);
+    }
+}
+
+/* 手機 */
+@media (max-width: 599px) {
+    .sutra-reading-panel {
+        height: clamp(240px, 45vh, 380px);
+        padding: 16px;
+        scrollbar-width: thin;
+    }
+}
+
+/* AI 人生顧問面板 */
+.ai-assistant-panel {
+    position: fixed;
+    z-index: 1100;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    width: min(440px, 100%);
+    height: 100vh;
+    height: 100dvh;
+    background: #fbf8f2;
+    color: #493522;
+    border-left: 1px solid #e8dfd2;
+    box-shadow: -12px 0 36px rgba(66, 43, 23, 0.12);
+    transform: translateX(105%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.25s ease, visibility 0.25s ease;
+}
+
+.ai-assistant-panel.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.ai-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px;
+    border-bottom: 1px solid #e8dfd2;
+}
+
+.ai-panel-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.ai-panel-header p {
+    margin: 6px 0 0;
+    color: #8b765d;
+    font-size: 14px;
+}
+
+.ai-panel-close {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #eee5da;
+    border-radius: 50%;
+    background: #fff;
+    color: #493522;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.ai-mode-list {
+    display: flex;
+    gap: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    border-bottom: 1px solid #eee5da;
+}
+
+.ai-mode-button {
+    flex: 1 0 auto;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: #fff;
+    color: #493522;
+    font: inherit;
+    cursor: pointer;
+}
+
+.ai-mode-button.active {
+    background: #f2e2bf;
+    border-color: #ead6a8;
+}
+
+.ai-chat-messages {
+    flex: 1;
+    min-height: 0;
+    padding: 18px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.ai-message {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.ai-message p {
+    margin: 4px 0 0;
+    white-space: pre-wrap;
+}
+
+.ai-message-speaker {
+    font-size: 12px;
+    color: #8b765d;
+    font-weight: 700;
+}
+
+.ai-message-assistant {
+    background: #fff;
+    border: 1px solid #eee5da;
+}
+
+.ai-message-user {
+    margin-left: 24px;
+    background: #f2e2bf;
+}
+
+.ai-chat-form {
+    flex-shrink: 0;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    background: #fbf8f2;
+    border-top: 1px solid #e8dfd2;
+}
+
+.ai-chat-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.ai-chat-input-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.ai-chat-input-row textarea {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    max-height: 120px;
+    padding: 12px;
+    border: 1px solid #cfc5b8;
+    border-radius: 12px;
+    background: #fff;
+    color: #493522;
+    font: inherit;
+    resize: vertical;
+}
+
+.ai-send-button {
+    min-width: 72px;
+    padding: 12px;
+    border: 0;
+    border-radius: 12px;
+    background: #79552f;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.ai-demo-note {
+    margin: 8px 0 0;
+    color: #8b765d;
+    font-size: 12px;
+}
+
+/* 手機版：浮動圓形按鈕 */
+@media (max-width: 600px) {
+    .ai-assistant-button {
+        top: auto;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        width: 58px;
+        min-height: 58px;
+        padding: 0;
+        border-radius: 50%;
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+    }
+
+    .ai-assistant-button span {
+        font-size: 0;
+        letter-spacing: 0;
+    }
+
+    .ai-assistant-button span::after {
+        content: "AI";
+        font-size: 17px;
+        letter-spacing: 0;
+    }
+
+    .ai-assistant-panel {
+        width: 100%;
+        border-left: 0;
+    }
+
+    .ai-mode-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-assistant-panel {
+        transition: none;
+    }
+}
+
+/* =========================================================
+   電腦版 AI 左右分割版面（只作用於 1024px 以上）
+   手機／平板沿用原本面板行為，不受這段影響
+   ========================================================= */
+@media (min-width: 1024px) {
+    :root {
+        --ai-panel-width: 35vw;
+    }
+
+    body.ai-layout-open {
+        overflow-x: hidden;
+    }
+
+    body.ai-layout-open .page-container {
+        width: calc(100% - var(--ai-panel-width) - 72px);
+        max-width: none;
+        margin: 28px 24px 40px;
+        transition: width 0.18s ease;
+    }
+
+    body.ai-layout-open .main-card {
+        width: 100%;
+    }
+
+    body.ai-layout-open .ai-assistant-button {
+        display: none;
+    }
+
+    body.ai-layout-open .ai-assistant-panel {
+        width: var(--ai-panel-width);
+        min-width: 320px;
+        max-width: 640px;
+        transform: translateX(0);
+        visibility: visible;
+        pointer-events: auto;
+        transition: width 0.12s ease, box-shadow 0.25s ease;
+    }
+
+    .ai-panel-resize-handle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -5px;
+        z-index: 5;
+        width: 10px;
+        cursor: col-resize;
+        touch-action: none;
+        background: transparent;
+    }
+
+    .ai-panel-resize-handle::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 4px;
+        width: 2px;
+        background: transparent;
+        transition: background-color 0.15s ease;
+    }
+
+    .ai-panel-resize-handle:hover::after,
+    .ai-panel-resize-handle:focus-visible::after,
+    body.ai-layout-resizing .ai-panel-resize-handle::after {
+        background: #c8ad8e;
+    }
+
+    .ai-panel-resize-handle:focus-visible {
+        outline: 2px solid #b48b5b;
+        outline-offset: -2px;
+    }
+
+    body.ai-layout-resizing,
+    body.ai-layout-resizing * {
+        cursor: col-resize !important;
+        user-select: none !important;
+    }
+
+    body.ai-layout-resizing .page-container,
+    body.ai-layout-resizing .ai-assistant-panel {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>經文播放器</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}"
+    >
+</head>
+
+<body>
+    <main class="page-container">
+        <!-- 首頁主要卡片 -->
+        <section class="main-card">
+            <header class="page-header">
+                <div class="brand-label">FLASK SUTRA PLAYER</div>
+                <div class="header-content">
+                    <h1>經文播放器</h1>
+                    <!-- 字體大小設定 -->
+                    <div class="font-controls" aria-label="字體大小設定">
+                        {% include "partials/font_controls.html" %}
+                    </div>
+                </div>
+            </header>
+
+            <!-- 經文顯示區 -->
+            <section class="sutra-container">
+                {% for sutra in sutras %}
+                    <a
+                        class="sutra-content font-medium sutra-card-link"
+                        href="{{ sutra.url }}"
+                        aria-label="進入{{ sutra.title }}"
+                >
+                    {{ sutra.title }}
+                </a>
+            {% else %}
+                <p>目前尚無可用的經文，請確認經文檔資料夾。</p>
+            {% endfor %}
+            </section>
+        </section>
+
+    </main>
+
+    <!-- 右側 AI 人生顧問入口 -->
+    {% include "partials/ai_assistant_button.html" %}
+
+    <script
+        src="{{ url_for('static', filename='js/app.js') }}"
+        defer
+    ></script>
+</body>
+</html>
