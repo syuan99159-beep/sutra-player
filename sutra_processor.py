@@ -32,7 +32,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # WhisperX 自動對齊設定
 # =========================
 
-SOUND_DIR = PROJECT_DIR.parent / "sound"
+SOUND_DIR = PROJECT_DIR / "static" / "sound"
 ALIGNMENT_DIR = PROJECT_DIR / "data" / "alignments"
 ALIGNER_SCRIPT = PROJECT_DIR / "audio_aligner.py"
 

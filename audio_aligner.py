@@ -12,7 +12,7 @@ import whisperx
 PROJECT_DIR = Path(__file__).resolve().parent
 ROOT_DIR = PROJECT_DIR.parent
 
-SOUND_DIR = ROOT_DIR / "sound"
+SOUND_DIR = PROJECT_DIR / "static" / "sound"
 SUTRA_DIR = PROJECT_DIR / "data" / "sutras"
 ALIGNMENT_DIR = PROJECT_DIR / "data" / "alignments"
 
@@ -143,25 +143,98 @@ def build_alignment(sutra_id):
     print(f"音訊實際長度：{audio_duration:.2f} 秒")
 
     full_text = " ".join(paragraphs)
-    alignment_input = [{
-        "text": full_text,
-        "start": 0.0,
-        "end": audio_duration,
-    }]
 
-    print("正在進行強制對齊……")
-    result = whisperx.align(
-        alignment_input,
-        model,
-        metadata,
-        audio,
-        DEVICE,
-        return_char_alignments=True,
-    )
+    # 將段落自動分組，避免一次把整篇經文送入 WhisperX。
+    # 音訊切點先依文字長度估算，並在每個區塊前後保留緩衝秒數。
+    # 若區塊邊界估算不準，後面的字元核對會中止輸出，避免產生錯位檔案。
+    TARGET_CHARS_PER_CHUNK = 300
+    AUDIO_PADDING_SECONDS = 12.0
+
+    paragraph_groups = []
+    current_group = []
+    current_size = 0
+    for paragraph_index, paragraph in enumerate(paragraphs):
+        paragraph_size = len(normalize_text(paragraph))
+        if current_group and current_size + paragraph_size > TARGET_CHARS_PER_CHUNK:
+            paragraph_groups.append(current_group)
+            current_group = []
+            current_size = 0
+        current_group.append((paragraph_index, paragraph))
+        current_size += paragraph_size
+    if current_group:
+        paragraph_groups.append(current_group)
+
+    total_chars = sum(len(normalize_text(p)) for p in paragraphs)
+    if total_chars == 0:
+        raise ValueError("經文沒有可供對齊的文字。")
+
+    print(f"全文非標點字數：{total_chars}")
+    print(f"自動分成 {len(paragraph_groups)} 個區塊，每區約 {TARGET_CHARS_PER_CHUNK} 字。")
+    print("正在進行分段強制對齊……")
 
     aligned_chars = []
-    for segment in result.get("segments", []):
-        aligned_chars.extend(segment.get("chars", []))
+    cumulative_chars = 0
+    for chunk_index, group in enumerate(paragraph_groups, start=1):
+        group_text = " ".join(paragraph for _, paragraph in group)
+        chunk_char_count = sum(len(normalize_text(paragraph)) for _, paragraph in group)
+        estimated_start = audio_duration * cumulative_chars / total_chars
+        cumulative_chars += chunk_char_count
+        estimated_end = audio_duration * cumulative_chars / total_chars
+
+        window_start = max(0.0, estimated_start - AUDIO_PADDING_SECONDS)
+        window_end = min(audio_duration, estimated_end + AUDIO_PADDING_SECONDS)
+        sample_start = max(0, int(window_start * 16000))
+        sample_end = min(len(audio), int(window_end * 16000))
+        audio_chunk = audio[sample_start:sample_end]
+        chunk_duration = len(audio_chunk) / 16000
+        if len(audio_chunk) == 0:
+            raise RuntimeError(f"第 {chunk_index} 個區塊沒有音訊資料。")
+
+        print(
+            f"區塊 {chunk_index}/{len(paragraph_groups)}："
+            f"段落 {group[0][0] + 1}-{group[-1][0] + 1}，"
+            f"音訊約 {window_start:.1f}-{window_end:.1f} 秒"
+        )
+        chunk_result = whisperx.align(
+            [{"text": group_text, "start": 0.0, "end": chunk_duration}],
+            model,
+            metadata,
+            audio_chunk,
+            DEVICE,
+            return_char_alignments=True,
+        )
+
+        chunk_chars = []
+        for segment in chunk_result.get("segments", []):
+            chunk_chars.extend(segment.get("chars", []))
+
+        for item in chunk_chars:
+            if (
+                item.get("char")
+                and item["char"] not in IGNORED_CHARS
+                and item.get("start") is not None
+                and item.get("end") is not None
+            ):
+                aligned_chars.append({
+                    "char": item["char"],
+                    "start": float(item["start"]) + window_start,
+                    "end": float(item["end"]) + window_start,
+                })
+
+        # 每區完成後釋放暫存結果，降低不必要的記憶體占用。
+        del chunk_result, chunk_chars, audio_chunk
+
+    expected = normalize_text(full_text)
+    actual = normalize_text("".join(item["char"] for item in aligned_chars))
+    print(f"原文非標點字數：{len(expected)}")
+    print(f"有時間的字元數：{len(aligned_chars)}")
+
+    if expected != actual:
+        raise RuntimeError(
+            "分段對齊輸出的字元與原文不完全一致，已停止輸出，避免逐字高亮錯位。\n"
+            f"原文開頭：{expected[:60]}\n"
+            f"對齊開頭：{actual[:60]}"
+        )
 
     timed_chars = [
         {
