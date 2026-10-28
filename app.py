@@ -339,6 +339,20 @@ def serve_sound(filename):
 # =========================
 # AI 人生顧問：Gemini API
 # =========================
+
+# AI 共通回覆長度規則
+AI_RESPONSE_LENGTH_RULE = (
+    "【回覆長度與表達規範】"
+    "1. 一般問題以 80～150 個中文字為目標，通常使用 3～5 句話。"
+    "2. 開頭直接回答問題，不要使用冗長的寒暄或重述問題。"
+    "3. 優先提供最重要的結論與 1～3 個重點，避免重複說明相同內容。"
+    "4. 依照目前選定的模式回答，不要為了補充內容而延伸到無關領域。"
+    "5. 除非使用者要求詳細說明，否則不要主動提供過多背景、案例或延伸知識。"
+    "6. 使用者要求深入分析、比較或完整步驟時，可以適度增加篇幅。"
+    "7. 不得為了縮短篇幅而省略重要資訊、必要步驟或關鍵風險。"
+    "8. 使用繁體中文，語氣自然、清楚、容易理解。"
+)
+
 AI_MODES = {
     "sutra": {
         "name": "經文智慧",
@@ -653,8 +667,12 @@ def ai_assistant():
             model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
             contents=contents,
             config=types.GenerateContentConfig(
-                system_instruction=AI_MODES[mode]["instruction"],
-                max_output_tokens=4096,
+                system_instruction=(
+                    AI_MODES[mode]["instruction"]
+                    + "\n\n"
+                    + AI_RESPONSE_LENGTH_RULE
+                ),
+                max_output_tokens=1024,
                 temperature=0.7,
             ),
         )
