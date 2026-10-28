@@ -1,7 +1,7 @@
 {
-  "title": "般若波羅蜜多心經原文",
-  "source_json": "般若波羅蜜多心經原文-ab1ceeadf0.json",
-  "audio_file": "般若波羅蜜多心經原文.mp3",
+  "title": "般若波羅蜜多心經",
+  "source_json": "般若波羅蜜多心經-ab1ceeadf0.json",
+  "audio_file": "般若波羅蜜多心經.mp3",
   "language": "zh",
   "device": "cpu",
   "character_alignment": true,
