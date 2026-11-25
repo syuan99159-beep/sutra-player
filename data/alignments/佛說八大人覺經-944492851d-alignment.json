@@ -1,8 +1,8 @@
 {
-  "title": "八大人覺經",
-  "sutra_id": "八大人覺經-944492851d",
-  "source_json": "八大人覺經-944492851d.json",
-  "audio_file": "八大人覺經.mp3",
+  "title": "佛說八大人覺經",
+  "sutra_id": "佛說八大人覺經-944492851d",
+  "source_json": "佛說八大人覺經-944492851d.json",
+  "audio_file": "佛說八大人覺經.mp3",
   "language": "zh",
   "device": "cpu",
   "character_alignment": true,
